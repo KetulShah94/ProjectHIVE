@@ -11,23 +11,23 @@ object EnrichTrip extends HiveClient with App {
   stmt.execute("set hive.exec.dynamic.partition.mode=nonstrict")
   stmt.execute("SET hive.exec.dynamic.partition = true")
 
-  /*val conf = new Configuration()
+  val conf = new Configuration()
   var localPath: String = "/home/ketul/opt/hadoop-2.7.7/etc/cloudera/"
   conf.addResource(new Path(localPath + "core-site.xml"))
   conf.addResource(new Path(localPath + "hdfs-site.xml"))
-  val fs: FileSystem = FileSystem.get(conf)*/
+  val fs: FileSystem = FileSystem.get(conf)
 
 
   /*Deleting dir*/
-//  if (fs.exists(new Path("/user/winter2020/ketul/project4"))) {
-//    println("deleting file: /user/winter2020/ketul/project4")
-//    fs.delete(new Path("/user/winter2020/ketul/project4"), true)
-//  } else
-//    println("Does not exists")
-//
-//  /*creating dir*/
-//  fs.mkdirs(new Path("/user/winter2020/ketul/project4"))
-//  println("Created sub folder project4")
+  if (fs.exists(new Path("/user/winter2020/ketul/project4"))) {
+    println("deleting file: /user/winter2020/ketul/project4")
+    fs.delete(new Path("/user/winter2020/ketul/project4"), true)
+  } else
+    println("Does not exists")
+
+  /*creating dir*/
+  fs.mkdirs(new Path("/user/winter2020/ketul/project4"))
+  println("Created sub folder project4")
 
   /* drop and create of tables*/
   stmt.execute(" DROP TABLE IF EXISTS winter2020_ketul.ext_trips")
@@ -72,38 +72,38 @@ object EnrichTrip extends HiveClient with App {
     " LOCATION '/user/winter2020/ketul/project4/frequencies' " +
     " tblproperties ('skip.header.line.count' = '1', 'serialization.null.format' = '')")
   println("ext_frequencies is created")
-//
-//  /*CopyFromHDFSToHDFS*/
-//  val source ="/user/winter2020/ketul/stm/"
-//  val destination ="/user/winter2020/ketul/project4/"
-//
-//  org.apache.hadoop.fs.FileUtil.copy(
-//    new org.apache.hadoop.fs.Path(source + "trips.txt").getFileSystem(conf),
-//    new org.apache.hadoop.fs.Path(source + "trips.txt"),
-//      new Path(destination + "tirps").getFileSystem(conf),
-//    new Path(destination + "tirps"),
-//    true,
-//    conf
-//  )
-//  println("Trips file copy from hdfs")
 
-//  org.apache.hadoop.fs.FileUtil.copy(
-//    new Path(source + "routes.txt").getFileSystem(conf),
-//    new Path(source + "routes.txt"),
-//      new Path(destination + "frequencies").getFileSystem(conf),
-//    new Path(destination + "frequencies"),
-//    true,
-//      conf)
-//  println("Routes file copy from hdfs")
-//
-//  org.apache.hadoop.fs.FileUtil.copy(
-//    new Path(source + "calender.txt").getFileSystem(conf),
-//    new Path(source + "calender.txt"),
-//    new Path(destination + "calendar_date").getFileSystem(conf),
-//    new Path(destination + "calendar_date"),
-//      true,
-//  conf)
-//  println("Calender file copy from hdfs")
+  /*CopyFromHDFSToHDFS*/
+  val source ="/user/winter2020/ketul/stm/"
+  val destination ="/user/winter2020/ketul/project4/"
+
+  org.apache.hadoop.fs.FileUtil.copy(
+    new org.apache.hadoop.fs.Path(source + "trips.txt").getFileSystem(conf),
+    new org.apache.hadoop.fs.Path(source + "trips.txt"),
+      new org.apache.hadoop.fs.Path(destination + "tirps").getFileSystem(conf),
+    new org.apache.hadoop.fs.Path(destination + "tirps"),
+    false,
+    conf
+  )
+  println("Trips file copy from hdfs")
+
+  org.apache.hadoop.fs.FileUtil.copy(
+    new org.apache.hadoop.fs.Path(source + "routes.txt").getFileSystem(conf),
+    new org.apache.hadoop.fs.Path(source + "routes.txt"),
+      new org.apache.hadoop.fs.Path(destination + "frequencies").getFileSystem(conf),
+    new org.apache.hadoop.fs.Path(destination + "frequencies"),
+    false,
+      conf)
+  println("Routes file copy from hdfs")
+
+  org.apache.hadoop.fs.FileUtil.copy(
+    new org.apache.hadoop.fs.Path(source + "calender.txt").getFileSystem(conf),
+    new org.apache.hadoop.fs.Path(source + "calender.txt"),
+    new org.apache.hadoop.fs.Path(destination + "calendar_date").getFileSystem(conf),
+    new org.apache.hadoop.fs.Path(destination + "calendar_date"),
+    false,
+  conf)
+  println("Calender file copy from hdfs")
 
 
   val tableName: String = "enrichedtrip"
